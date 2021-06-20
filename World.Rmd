@@ -1,0 +1,173 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+### **Introduction**
+The World Happiness Report is a yearly survey of the state of global happiness. The report are used global  from governments and organization to use happiness indicators to help with policy-making decisions. 
+```{r}
+ # installs the necessary libraries  
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(data.table)
+library(corrplot)
+library(corrgram)
+library(forcats)
+```
+
+### **Overview of the Data**
+The data that used here is the survery from 2019. They are 9 variables in this survery.
+9 Varables are as follows
+
+Overall rank: The over all rank in which country has been ranked.
+
+Country or region: The name of the country in the survery.
+
+Score: The score that each country has been given in the survery.
+
+GDP per capita: Per capita gross domestic product (GDP) is the country's economic output per person.
+
+Social Support: Social support is rated by how munch a citizen of the country gets support from family and friends.
+
+Healthy life expectancy: The rating of health and life expectancy of the country.
+
+Freedom to make life choices: The rating of the country's citizen to make their own choices in life.
+
+Generosity: The rating of the country's citizen of givng their time to others.
+
+Perceptions of corruption: The country's perceived levels of public sector corruption.
+
+```{r}
+# reads the 2019 csv file and shows the first 5 rows of the data set
+data <- read.csv("2019.csv")
+head(data)
+```
+
+### **Structure of the Data**
+Below will show the structure of the data set. The output shows there are 156 columns and 9 rows.
+```{r}
+# shows the structure of the data set
+str(data)
+```
+
+## **Summary of the Data set**
+Below will shows the summary of the data. For the numeric variables it show Min, 1st Quarter, Median, Mean, 3rd Quarter, and Max. For Country.or.region it shows that it is a character class.
+```{r}
+# shows the summary of the data set
+summary(data)
+```
+
+### **Renaming the columns. 
+Here I renamed the columns for efficient use through out the report when calling them.
+```{r}
+# renames the columns in the data set and shows the first 5 rows with the change of column names
+data <- data %>% rename(country = Country.or.region, gdp = GDP.per.capita, support=Social.support,life_expectancy=Healthy.life.expectancy,make_choices=Freedom.to.make.life.choices,corruption=Perceptions.of.corruption,rank=Overall.rank) 
+
+head(data)
+```
+
+### **Graph for Top 5 countries with the highest Scores**
+Below will output a bar chart of the top 5 countries with the highest score
+```{r}
+# outputs bar chart of the top 5 countries with the highest scores
+top_n(data,n=5,Score)  %>% mutate(country = fct_reorder(country, desc(Score))) %>%
+  ggplot( aes(x=country, y= Score)) + geom_label(aes(label = Score))+
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw()+labs(title="Top 5 for Score",y="Score")
+```
+
+### ** Graph for Top 5 countires with the highest GDP per Capita**
+Below will output a bar chart of the top 5 countries with the highest GDP per Capita
+```{r}
+# outputs the top 5 countries with highest GDP per capita
+top_n(data,n=5, gdp) %>%mutate(country = fct_reorder(country, desc(gdp))) %>%
+  ggplot( aes(x=country, y=gdp)) + geom_label(aes(label = gdp))+
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw()+labs(title="Top 5 for GDP per capita ", y="GDP per capita")
+```
+
+### **Graph for Top 5 countries with the highest Social Support**
+Below will output a bar chart of the top 5 countries with the highest Social Support
+```{r}
+# outputs the top 5 countries with the highest Social Support
+top_n(data,n=10, support) %>%mutate(country = fct_reorder(country, desc(support))) %>%
+  ggplot( aes(x=country, y=support)) + geom_label(aes(label = support))+ geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw() + labs(title="Top 5 for Social Support",y="Social Support")
+```
+
+### **Graph for Top 5 countires with the highest Freedom to make life choices**
+Below will output a bar chart of the top 5 countries with the highest Freedom to make life choices
+```{r}
+# outputs the top 5 countries with the highest Freedom to make life choices
+top_n(data,n=5,make_choices)  %>% mutate(country = fct_reorder(country, desc(make_choices))) %>%
+  ggplot( aes(x=country, y = make_choices)) + geom_label(aes(label = make_choices))+
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw() + labs(title=" Top 5 for Freedom to make life choices ",y="Freedom to make life choices")
+```
+
+### **Graph for Top 5 countries with the highest Healthy life expectancy**
+Below will output a bar chart of the top 5 countries with the highest Healthy life expectancy
+```{r}
+# outputs the top 5 countries with the highest Healthy life expectancy
+top_n(data,n=5,life_expectancy) %>% mutate(country = fct_reorder(country, desc(life_expectancy))) %>%
+  ggplot( aes(x= country, y= as.character(life_expectancy))) + geom_label(aes(label = life_expectancy))+
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw() + labs(title="Top 5 for Healthy life expectancy", y="Healthy life expectancy")
+```
+
+### **Graph for Top 5 countires with the highest Generosity**
+Below will output a bar chart of the top 5 countries with the highest Generosity
+```{r}
+# outputs the top 5 countries with the highest Generosity
+top_n(data,n=5,Generosity) %>% mutate(country = fct_reorder(country, desc(Generosity))) %>%
+  ggplot( aes(x=country, y=Generosity)) +  geom_label(aes(label = Generosity))+
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw() + labs(title="Top 5 for Generosity",y="Generosity")
+```
+
+### **Graph for Top 5 countires with the highest Perceptions of corruption**
+Below will output a bar chart of the top 5 countries with the highest Perceptions of corruption
+```{r}
+# outputs the top 5 countries with the Perceptions of corruption
+top_n(data,n=5,corruption) %>% mutate(country = fct_reorder(country, desc(corruption))) %>%
+  ggplot( aes(x=country, y=corruption)) + geom_label(aes(label = corruption))+
+    geom_bar(stat="identity", fill="#f68060", alpha=.6, width=.4) +
+    
+    xlab("") +
+    theme_bw() + labs(title="Top 5 for Peceptions of corruption", y="Perceptions of corruption") 
+```
+
+### **Droping Columns**
+Here I droped the columns country and rank to only have columns with numeric values and put them into the variable num_data
+```{r}
+# drops rows that do not contain numeric data
+num_data <- data %>% subset(select=-c(country,rank))
+head(num_data)
+```
+
+### **Correlation of the variables**
+Below will show the correlation between the variables. This will show which variables has the highest correlation to the score variable.
+```{r}
+# calculates the correlation of the data  
+cordata = num_data[,c(1,2,3,4,5,6,7)]
+corr <- round(cor(cordata), 3)
+corr
+corrplot(corr, method = "circle")
+```
+
+## **Conclusion**
+With the data has been collected and shown we are now able to see which variables have a high correlation to the Score of the country. From the Corrplot we see the two highest variables that affects Score is GDP per capita and Social Support. While corruption and genrosity had a negative correlation to the Score.  
