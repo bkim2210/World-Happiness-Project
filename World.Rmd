@@ -59,7 +59,7 @@ Below will shows the summary of the data. For the numeric variables it show Min,
 summary(data)
 ```
 
-### **Renaming the columns. 
+### **Renaming the columns** 
 Here I renamed the columns for efficient use through out the report when calling them.
 ```{r}
 # renames the columns in the data set and shows the first 5 rows with the change of column names
@@ -80,7 +80,7 @@ top_n(data,n=5,Score)  %>% mutate(country = fct_reorder(country, desc(Score))) %
     theme_bw()+labs(title="Top 5 for Score",y="Score")
 ```
 
-### ** Graph for Top 5 countires with the highest GDP per Capita**
+### **Graph for Top 5 countires with the highest GDP per Capita**
 Below will output a bar chart of the top 5 countries with the highest GDP per Capita
 ```{r}
 # outputs the top 5 countries with highest GDP per capita
@@ -103,7 +103,7 @@ top_n(data,n=10, support) %>%mutate(country = fct_reorder(country, desc(support)
     theme_bw() + labs(title="Top 5 for Social Support",y="Social Support")
 ```
 
-### **Graph for Top 5 countires with the highest Freedom to make life choices**
+### **Graph for Top 5 countries with the highest Freedom to make life choices**
 Below will output a bar chart of the top 5 countries with the highest Freedom to make life choices
 ```{r}
 # outputs the top 5 countries with the highest Freedom to make life choices
